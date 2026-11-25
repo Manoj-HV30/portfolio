@@ -1,8 +1,10 @@
 {
   "title": "This website",
-  "description": "A static Astro portfolio with five original landscapes and a build article.",
-  "notes": "/build-notes/",
-  "tags": ["astro", "css"],
+  "description": "A static Astro portfolio with five original, Undertale-inspired landscapes.",
+  "tags": [
+    "astro",
+    "css"
+  ],
   "featured": true,
   "confirmed": false,
   "year": 2026

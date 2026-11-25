@@ -17,13 +17,11 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
 </BaseLayout>
 
+
+
 <style>
   @media (hover: hover) and (pointer: fine) {
-    :global(body[data-page="about"]),
-    :global(body[data-page="about"] main),
-    :global(body[data-page="about"] main a),
-    :global(body[data-page="about"] header),
-    :global(body[data-page="about"] header a) {
+    :global(body[data-page="about"] *) {
       cursor: url('/icons/golden-flower-cursor.svg') 15 12, auto;
     }
   }

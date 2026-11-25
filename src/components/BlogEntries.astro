@@ -1,10 +1,7 @@
----
-import { buildNotes } from '../data/blog'
----
+<p class="empty-blog">More soon.</p>
 
-<ul class="entry-list" role="list">
-  <li>
-    <h3><a href={buildNotes.href}>{buildNotes.title}</a></h3>
-    <p>{buildNotes.description}</p>
-  </li>
-</ul>
+<style>
+  .empty-blog {
+    color: var(--muted);
+  }
+</style>

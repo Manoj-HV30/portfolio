@@ -13,18 +13,18 @@ const scenes = {
   home: { src: '/ruins.webp', width: 1536, height: 512 },
   projects: { src: '/core-machinery.webp', width: 1536, height: 512 },
   blog: { src: '/waterfall-violet.webp', width: 1536, height: 512 },
-  vault: { src: '/vault-archive.webp', width: 1600, height: 533 },
+  vault: { src: '/vault-library-photo.webp', width: 2400, height: 800 },
   about: { src: '/night-horizon.webp', width: 1536, height: 512 },
 }
 const artwork = scenes[page]
-const sceneMarks: Partial<Record<Section, string>> = {
-  home: 'dog',
-  projects: 'star',
-  blog: 'echo',
-  vault: 'key',
-  about: 'star',
+const souls = {
+  home: { color: 'determination', trait: 'Determination' },
+  projects: { color: 'bravery', trait: 'Bravery' },
+  blog: { color: 'integrity', trait: 'Integrity' },
+  vault: { color: 'perseverance', trait: 'Perseverance' },
+  about: { color: 'kindness', trait: 'Kindness' },
 }
-const sceneMark = sceneMarks[page]
+const soul = souls[page]
 ---
 
 <header class:list={['masthead', page]} id="top" tabindex="-1">
@@ -44,122 +44,98 @@ const sceneMark = sceneMarks[page]
     </h1>
     {intro && <p>{intro}</p>}
   </div>
-  {sceneMark && <span class:list={["scene-mark", sceneMark]} aria-hidden="true"></span>}
-  {page !== 'about' && sceneMark && (
-    <button class:list={['scene-mark', sceneMark]} type="button" aria-label={page === 'home' ? 'Find the dog' : page === 'projects' ? 'Touch the determination star' : page === 'blog' ? 'Reveal the artifact' : 'Open the dimensional box'} data-easter-egg={page}>
-      {page === 'home' ? '🐕' : page === 'projects' ? '★' : page === 'blog' ? '♫' : '▣'}
-    </button>
-  )}
-  <span class="egg-message" data-egg-message aria-live="polite"></span>
+  <button class:list={['soul-heart', soul.color]} type="button" aria-label={soul.trait} aria-expanded="false" data-soul>
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
+      <path d="M3 1h3v1h2v2h2V2h2V1h3v1h1v1h1v4h-1v2h-2v2h-2v2h-2v1h-2v-1H6v-2H4v-2H2V9H1V5h1V3h1z" />
+    </svg>
+    <span>{soul.trait}</span>
+  </button>
   <slot />
 </header>
 
 <script>
-  const egg = document.querySelector<HTMLButtonElement>('[data-easter-egg]')
-  const message = document.querySelector<HTMLElement>('[data-egg-message]')
-  const lines: Record<string, string> = {
-    home: 'The dog has left behind a little dog residue.',
-    projects: 'Your determination increased. (The benchmark is unchanged.)',
-    blog: 'A red artifact appears. It seems to be impossible to pick up.',
-    vault: 'The box is full of dog hair. You find some residue instead.',
-  }
-
-  egg?.addEventListener('click', () => {
-    if (!message) return
-    message.textContent = lines[egg.dataset.easterEgg ?? ''] ?? ''
-    egg.classList.add('egg-found')
+  document.querySelectorAll<HTMLButtonElement>('[data-soul]').forEach((heart) => {
+    heart.addEventListener('click', () => {
+      const open = heart.getAttribute('aria-expanded') === 'true'
+      heart.setAttribute('aria-expanded', String(!open))
+    })
   })
 </script>
 
+
+
 <style>
-  .scene-mark {
+  .soul-heart {
     position: absolute;
-    right: clamp(1rem, 7vw, 7rem);
-    bottom: 2.05rem;
-    color: #e7c890;
-    opacity: 0.5;
-    font-size: 0.9rem;
-    line-height: 1;
-    cursor: pointer;
+    right: clamp(1.1rem, 7vw, 7rem);
+    bottom: 1.8rem;
+    display: grid;
+    place-items: center;
+    width: 3.1rem;
+    height: 3.1rem;
+    padding: 0;
     border: 0;
-    padding: .25rem;
     background: transparent;
-    text-shadow: 0 1px 5px #000;
-    pointer-events: auto;
+    color: var(--soul-color);
+    cursor: pointer;
   }
 
-  .scene-mark.dog {
-    width: 2.5rem;
-    height: 0.8rem;
-    background: #eee9dd;
-    clip-path: polygon(5% 28%, 50% 28%, 64% 0, 79% 28%, 100% 28%, 91% 75%, 23% 75%);
-    image-rendering: pixelated;
-  }
-
-  .scene-mark.star {
+  .soul-heart svg {
+    display: block;
     width: 2rem;
-    height: 0.7rem;
-    background: #ffeab5;
-    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
-    animation: star-glimmer 2.4s ease-in-out infinite;
+    height: 2rem;
+    overflow: visible;
+    fill: currentColor;
+    filter: drop-shadow(0 2px 3px #080b12aa);
   }
 
-  .scene-mark.echo {
-    width: 2rem;
-    height: 1.1rem;
-    border: 2px solid #a2d7ec;
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px #a2d7ec44, 0 0 0 8px #a2d7ec22;
-  }
-
-  .scene-mark.key {
-    width: 2rem;
-    height: 0.6rem;
-    border: 2px solid #ebc883;
-    border-radius: 50%;
-  }
-
-  .scene-mark:is(button):hover { transform: scale(1.22); }
-  .scene-mark:is(button):focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-
-  .scene-mark.key::after {
-    content: '';
+  .soul-heart span {
     position: absolute;
-    width: 1rem;
-    height: 2px;
-    top: 0.22rem;
-    left: 0.45rem;
-    background: #ebc883;
-    box-shadow: 0.55rem 3px 0 -0.4px #ebc883;
+    top: calc(100% + 0.2rem);
+    right: 0;
+    padding: 0.2rem 0.45rem;
+    border: 1px solid #ffffff40;
+    background: #111722eF;
+    color: #f4ede0;
+    font: 600 1.1rem/1 Caveat, cursive;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    translate: 0 -0.15rem;
+    transition: opacity 140ms ease, translate 140ms ease;
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .masthead.about,
-    .masthead.about a {
-      cursor: url('/icons/golden-flower-cursor.svg') 15 12, pointer;
-    }
-
-    .masthead.about nav a { cursor: pointer; }
+  .soul-heart:is(:hover, :focus-visible, [aria-expanded="true"]) span {
+    opacity: 1;
+    translate: 0 0;
   }
 
-  @keyframes star-glimmer {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 0.9; }
+  .soul-heart:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  .determination { --soul-color: #ff4b54; }
+  .bravery { --soul-color: #f29a48; }
+  .integrity { --soul-color: #579bf1; }
+  .perseverance { --soul-color: #bd82e8; }
+  .kindness { --soul-color: #72cb79; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .soul-heart svg { animation: heart-beat 1.25s ease-in-out infinite; }
   }
 
-  .egg-message {
-    position: absolute;
-    right: clamp(1rem, 7vw, 7rem);
-    bottom: 0.85rem;
-    max-width: min(28rem, 70vw);
-    color: var(--ink);
-    font-size: 0.82rem;
-    text-shadow: 0 1px 5px #000;
-    text-align: right;
+  @keyframes heart-beat {
+    0%, 100% { transform: scale(0.92); }
+    14% { transform: scale(1.08); }
+    28% { transform: scale(0.97); }
+    42% { transform: scale(1.04); }
   }
 
-  .egg-found { animation: egg-pop 280ms ease-out; }
-  @keyframes egg-pop { 50% { scale: 1.35; } }
+  @media (prefers-reduced-motion: reduce) {
+    .soul-heart span { transition: none; }
+  }
+
+  @media (max-width: 48rem) {
+    .soul-heart { right: 1rem; bottom: 1.2rem; width: 2.9rem; height: 2.9rem; }
+    .soul-heart svg { width: 1.9rem; height: 1.9rem; }
+  }
 
   .masthead {
     --top-space: 6.5625rem;
