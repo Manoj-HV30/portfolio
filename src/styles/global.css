@@ -36,6 +36,12 @@
   scroll-padding-top: 1.25rem;
 }
 
+@media (min-width: 48.0625rem) {
+  :root {
+    font-size: 112.5%;
+  }
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
