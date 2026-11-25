@@ -1,0 +1,12 @@
+{
+  "title": "Multithreaded Ray Tracer",
+  "description": "Implemented a CPU ray tracer with realistic lighting, reflections, and shadows. Multithreading rendered a 1200×675 image at 500 samples per pixel in 5m 20s, a 33× speedup over the single-threaded render.",
+  "github": "https://github.com/Manoj-HV30/multithreaded-raytracer",
+  "domain": "Computer graphics",
+  "tags": [
+    "C++"
+  ],
+  "confirmed": true,
+  "order": 2,
+  "year": 2026
+}

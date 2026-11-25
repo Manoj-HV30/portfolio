@@ -1,0 +1,237 @@
+---
+import { getCollection } from 'astro:content'
+
+const resumeCollection = await getCollection('resume')
+const data = resumeCollection[0].data
+---
+
+<section id="resume" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-number mono">02</span>
+      <h2>resume</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="resume-grid">
+      <div class="resume-column">
+        <h3 class="resume-subhead mono">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          experience
+        </h3>
+        <div class="resume-timeline">
+          {data.experience.map((exp, i) => (
+            <div class="timeline-item reveal" style={`animation-delay: ${i * 0.08}s`}>
+              <div class="timeline-dot"></div>
+              <div class="timeline-body">
+                <div class="timeline-period mono">{exp.period}</div>
+                <h4 class="timeline-role">{exp.role}</h4>
+                <div class="timeline-company mono">{exp.company}</div>
+                <p class="timeline-desc">{exp.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="resume-sidebar">
+        <div class="resume-block reveal">
+          <h3 class="resume-subhead mono">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            education
+          </h3>
+          {data.education.map(edu => (
+            <div class="edu-item">
+              <div class="edu-degree">{edu.degree}, {edu.field}</div>
+              <div class="edu-school mono">{edu.institution}</div>
+              <div class="edu-year mono">{edu.year}</div>
+            </div>
+          ))}
+        </div>
+
+        <div class="resume-block reveal" style="animation-delay: 0.15s">
+          <h3 class="resume-subhead mono">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            skills
+          </h3>
+          <div class="skills-grid">
+            {data.skills.map(skill => (
+              <span class="skill-tag">{skill}</span>
+            ))}
+          </div>
+        </div>
+
+        <a href="/resume.pdf" class="resume-download reveal" style="animation-delay: 0.25s" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          download PDF
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .resume-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .resume-subhead {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .resume-subhead svg {
+    color: var(--accent);
+  }
+
+  .resume-timeline {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .resume-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--border), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -1.5rem;
+    top: 0.35rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-primary);
+    transform: translateX(-4px);
+    box-shadow: 0 0 6px var(--accent-dim);
+  }
+
+  .timeline-period {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-role {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+  }
+
+  .timeline-company {
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  .resume-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .resume-block {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+  }
+
+  .edu-item {
+    margin-bottom: 1rem;
+  }
+
+  .edu-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .edu-degree {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+  }
+
+  .edu-school {
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  .edu-year {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    margin-top: 0.1rem;
+  }
+
+  .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .skill-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    background: var(--bg-hover);
+    padding: 0.25rem 0.55rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+  }
+
+  .resume-download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .resume-download:hover {
+    background: var(--accent);
+    color: var(--bg-primary);
+  }
+
+  @media (max-width: 768px) {
+    .resume-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content'
+
+interface Props {
+  limit?: number
+}
+
+const { limit } = Astro.props
+const projects = (await getCollection('projects', ({ data }) => data.confirmed))
+  .map(({ data }) => data)
+  .sort((a, b) => a.order - b.order || Number(b.featured) - Number(a.featured) || b.year - a.year || a.title.localeCompare(b.title))
+  .slice(0, limit)
+---
+
+<ul class="entry-list project-list" role="list">
+  {projects.map(({ title, description, url, github, domain, tags }) => (
+    <li>
+      <h3>{url || github ? <a href={url ?? github}>{title}</a> : title}</h3>
+      {domain && <span class="domain">{domain}</span>}
+      <p>{description}</p>
+      {tags.length > 0 && <p class="stack">Stack <span>{tags.join(' · ')}</span></p>}
+    </li>
+  ))}
+</ul>
+
+<style>
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    column-gap: 1rem;
+  }
+
+  h3 a {
+    text-decoration-thickness: 1px;
+  }
+
+  p {
+    flex-basis: 100%;
+  }
+
+  .domain,
+  .stack {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .stack span {
+    margin-inline-start: 0.4em;
+    color: var(--ink);
+  }
+
+  @media (max-width: 35rem) {
+    .domain {
+      flex-basis: 100%;
+    }
+  }
+</style>

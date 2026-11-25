@@ -1,0 +1,103 @@
+---
+import GliderLogo from './GliderLogo.astro'
+---
+
+<header class="header">
+  <nav class="container header-nav" aria-label="Primary navigation">
+    <a href="#" class="header-logo" aria-label="Home">
+      <GliderLogo />
+      <span class="header-name">m4n0j</span>
+    </a>
+    <div class="header-links">
+      <a href="#projects" class="header-link mono">projects</a>
+      <a href="#resume" class="header-link mono">resume</a>
+      <a href="#media" class="header-link mono">media</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Add scrolled class for backdrop effect
+  const header = document.querySelector('.header')!
+  let ticking = false
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > 50)
+        ticking = false
+      })
+      ticking = true
+    }
+  })
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 0.75rem 0;
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  .header.scrolled {
+    background: rgba(7, 7, 13, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-color: var(--border);
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .header-name {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .header-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .header-link {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius);
+    transition: color 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+  }
+
+  .header-link:hover {
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  @media (max-width: 480px) {
+    .header-name {
+      display: none;
+    }
+    .header-link {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.5rem;
+    }
+  }
+</style>

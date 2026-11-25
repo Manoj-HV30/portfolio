@@ -1,0 +1,184 @@
+<span class="arrival-star twinkle" data-arrival-star aria-hidden="true"></span>
+
+<div class="footsteps reading-column" data-footsteps>
+  <button type="button" data-footprint hidden>
+    <span class="footprint" aria-hidden="true"></span>
+    <span>Leave a footprint</span>
+  </button>
+  <span class="trail" data-trail aria-hidden="true">
+    <span class="footprint"></span>
+    <span class="footprint"></span>
+    <span class="footprint"></span>
+  </span>
+</div>
+
+<script>
+  const star = document.querySelector<HTMLElement>('[data-arrival-star]')
+  const footsteps = document.querySelector<HTMLElement>('[data-footsteps]')
+  const button = footsteps?.querySelector<HTMLButtonElement>('[data-footprint]')
+  const trail = footsteps?.querySelector<HTMLElement>('[data-trail]')
+
+  if (footsteps && button && trail) {
+    footsteps.dataset.interactive = ''
+    button.hidden = false
+    button.addEventListener('click', () => {
+      trail.classList.remove('stepped')
+      void trail.offsetWidth
+      trail.classList.add('stepped')
+    })
+  }
+
+  if (star) {
+    window.addEventListener('pageshow', (event) => {
+      if (!event.persisted) return
+      star.classList.remove('twinkle')
+      void star.offsetWidth
+      star.classList.add('twinkle')
+    })
+  }
+</script>
+
+<style>
+  .arrival-star {
+    position: absolute;
+    top: 30%;
+    right: 24%;
+    width: 0.625rem;
+    aspect-ratio: 1;
+    background: #f7e2b5;
+    color: #f7e2b5;
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+    opacity: 0.58;
+    pointer-events: none;
+  }
+
+  .footsteps {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    min-height: 2.75rem;
+    gap: 0.75rem;
+    color: var(--link);
+    pointer-events: none;
+  }
+
+  button:not([hidden]) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.75rem;
+    padding: 0.15rem 0.35rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 52%, transparent);
+    text-underline-offset: 0.24em;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:is(:hover, :active, :focus-visible) {
+    color: var(--ink);
+    text-decoration-color: currentColor;
+  }
+
+  .trail {
+    display: flex;
+    align-items: center;
+    gap: 0.36rem;
+  }
+
+  .footprint {
+    display: inline-block;
+    position: relative;
+    width: 0.53rem;
+    height: 0.94rem;
+    rotate: 28deg;
+  }
+
+  .footprint::before, .footprint::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+  }
+
+  .footprint::before {
+    inset: 0 0.04rem auto 0;
+    height: 0.57rem;
+    border-radius: 65% 55% 44% 38%;
+  }
+
+  .footprint::after {
+    inset: auto 0.1rem 0 0.06rem;
+    height: 0.26rem;
+    border-radius: 40% 35% 55% 48%;
+  }
+
+  .trail .footprint {
+    opacity: 0.42;
+  }
+
+  .trail .footprint:nth-child(even) {
+    translate: 0 -0.2rem;
+    rotate: 46deg;
+  }
+
+  [data-interactive] .trail .footprint {
+    opacity: 0;
+  }
+
+  @media (max-width: 48rem) {
+    .arrival-star {
+      top: 36%;
+      right: 16%;
+    }
+
+    .footsteps {
+      bottom: 0.24rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .arrival-star.twinkle {
+      animation: twinkle 820ms 160ms ease-in-out;
+    }
+
+    button {
+      transition: color 160ms ease-out, text-decoration-color 160ms ease-out;
+    }
+
+    [data-interactive] .stepped .footprint {
+      animation: footprint-fade 960ms ease-out;
+    }
+
+    .stepped .footprint:nth-child(2) {
+      animation-delay: 120ms;
+    }
+
+    .stepped .footprint:nth-child(3) {
+      animation-delay: 240ms;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-interactive] .trail .footprint { opacity: 0.42; }
+    [data-interactive] .stepped .footprint { opacity: 0.8; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.58; scale: 1; }
+    42% { opacity: 1; scale: 1.42; }
+  }
+
+  @keyframes footprint-fade {
+    0%, 100% { opacity: 0; }
+    17%, 44% { opacity: 0.82; }
+  }
+</style>

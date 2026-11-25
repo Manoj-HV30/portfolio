@@ -1,0 +1,139 @@
+---
+// Lightweight canvas-based cellular automaton background.
+// Runs at low resolution and low framerate to minimize perf impact.
+// Automatically pauses when not visible (IntersectionObserver).
+---
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement
+  if (!canvas) throw new Error('canvas not found')
+
+  const ctx = canvas.getContext('2d')!
+  let animationId: number | null = null
+  let grid: Uint8Array[] = []
+  let rows = 0
+  let cols = 0
+  let lastTick = 0
+  const TICK_INTERVAL = 220 // ms between generations
+  const CELL_SIZE = 8
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    const w = window.innerWidth
+    const h = window.innerHeight
+    canvas.width = w * dpr
+    canvas.height = h * dpr
+    canvas.style.width = w + 'px'
+    canvas.style.height = h + 'px'
+    ctx.scale(dpr, dpr)
+
+    // Recalculate grid dimensions (keep it small for perf)
+    const newCols = Math.ceil(w / CELL_SIZE)
+    const newRows = Math.ceil(h / CELL_SIZE)
+
+    if (newCols !== cols || newRows !== rows) {
+      cols = newCols
+      rows = newRows
+      initGrid()
+    }
+  }
+
+  function initGrid() {
+    grid = []
+    for (let r = 0; r < rows; r++) {
+      const row = new Uint8Array(cols)
+      for (let c = 0; c < cols; c++) {
+        // Start with ~15% density scattered randomly
+        row[c] = Math.random() < 0.15 ? 1 : 0
+      }
+      grid.push(row)
+    }
+  }
+
+  function nextGeneration() {
+    const newGrid: Uint8Array[] = []
+    for (let r = 0; r < rows; r++) {
+      const newRow = new Uint8Array(cols)
+      for (let c = 0; c < cols; c++) {
+        let neighbors = 0
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (dr === 0 && dc === 0) continue
+            const nr = (r + dr + rows) % rows
+            const nc = (c + dc + cols) % cols
+            neighbors += grid[nr][nc]
+          }
+        }
+        const alive = grid[r][c]
+        newRow[c] = (alive && (neighbors === 2 || neighbors === 3)) || (!alive && neighbors === 3) ? 1 : 0
+      }
+      newGrid.push(newRow)
+    }
+    grid = newGrid
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    // Ultra-low opacity — barely perceptible
+    ctx.fillStyle = 'rgba(74, 240, 200, 0.035)'
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (grid[r][c]) {
+          ctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE - 1, CELL_SIZE - 1)
+        }
+      }
+    }
+  }
+
+  function tick(timestamp: number) {
+    if (timestamp - lastTick >= TICK_INTERVAL) {
+      nextGeneration()
+      draw()
+      lastTick = timestamp
+    }
+    animationId = requestAnimationFrame(tick)
+  }
+
+  // Pause when offscreen
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          if (!animationId) {
+            lastTick = performance.now()
+            animationId = requestAnimationFrame(tick)
+          }
+        } else {
+          if (animationId) {
+            cancelAnimationFrame(animationId)
+            animationId = null
+          }
+        }
+      }
+    },
+    { threshold: 0 }
+  )
+  observer.observe(canvas)
+
+  window.addEventListener('resize', resize)
+  resize()
+  lastTick = performance.now()
+  animationId = requestAnimationFrame(tick)
+</script>
+
+<style>
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 1;
+  }
+</style>

@@ -1,0 +1,9 @@
+{
+  "title": "orbital",
+  "description": "Declarative cluster orchestration toolkit for homelab Kubernetes. Define infrastructure, service meshes, and observability stacks in TOML. Generates Flux/ArgoCD manifests and Helm values automatically.",
+  "url": "https://orbital.example.com",
+  "github": "https://github.com/user/orbital",
+  "tags": ["go", "kubernetes", "flux", "infrastructure"],
+  "featured": true,
+  "year": 2025
+}

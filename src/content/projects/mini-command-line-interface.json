@@ -1,0 +1,12 @@
+{
+  "title": "Mini Command-Line Interface",
+  "description": "Built a REPL-style command-line interface from scratch using raw ANSI escape sequences. Added Bash-style line editing, cursor and word navigation, text selection, and live whitespace highlighting.",
+  "github": "https://github.com/Manoj-HV30/Mini-command-line-interface",
+  "domain": "Terminal tooling",
+  "tags": [
+    "Python"
+  ],
+  "confirmed": true,
+  "order": 4,
+  "year": 2026
+}

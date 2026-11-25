@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { buildNotes } from '../data/blog'
+---
+
+<BaseLayout page="blog" title={buildNotes.title} intro="Making this portfolio." description={buildNotes.description} article>
+  <article class="prose">
+    <section aria-labelledby="landscapes">
+      <h2 id="landscapes">Five landscapes</h2>
+      <p>
+        The illustrations take their cues from Undertale. An old stone arcade strewn with golden leaves opens Home, copper machinery sits above Projects, and a violet cavern frames Blog. Vault opens onto an underground archive with a brass door. About looks out over a night horizon inspired by Hopes and Dreams.
+      </p>
+      <p>
+        The scenes were made for this site with OpenAI ImageGen and are served locally as WebP. A narrower Snowdin crop keeps the lit window in view on phones. All five scenes fade into the same charcoal reading surface.
+      </p>
+      <p>
+        The portrait beside the Home title is a <a href="https://www.stickpng.com/img/games/undertale/undertale-papyrus">Papyrus sticker from StickPNG</a>. Papyrus is a character from Toby Fox’s Undertale. The X, Discord, and Telegram marks come from <a href="https://simpleicons.org/">Simple Icons</a>.
+      </p>
+    </section>
+    <section aria-labelledby="typography">
+      <h2 id="typography">Type and layout</h2>
+      <p>
+        Pixelify Sans sets the headings and Inter sets the body. Both fonts are self-hosted under the SIL Open Font License. The centered navigation, title, and tagline take their spacing cues from <a href="https://cxinu.github.io/">cxinu’s homepage</a>. Section headings sit flush left in the reading column.
+      </p>
+      <p><a href="/PixelifySans-OFL.txt">Pixelify Sans license</a> · <a href="/Inter-OFL.txt">Inter license</a></p>
+    </section>
+    <section aria-labelledby="astro">
+      <h2 id="astro">Astro and content</h2>
+      <p>
+        Astro 5 builds the site as static HTML. Projects uses confirmed entries from the projects collection. This article is the first entry in Blog. Home links to my profiles. Vault is reserved for future research notes.
+      </p>
+    </section>
+    <section aria-labelledby="motion">
+      <h2 id="motion">Motion</h2>
+      <p>
+        The landscape and title settle in over 420 milliseconds, and links respond in 160 milliseconds. Supporting browsers use a 200-millisecond page dissolve. A pixel flower follows the pointer on About, where a short dialogue hides a shortcut to my résumé. Reduced motion keeps the scenes and the Home record still.
+      </p>
+    </section>
+    <a class="back" href="/blog/">Back to Blog</a>
+  </article>
+</BaseLayout>
+
+<style>
+  .back {
+    display: inline-block;
+    margin-top: 1.8rem;
+  }
+</style>

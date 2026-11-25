@@ -1,245 +1,107 @@
 ---
-const name = "Your Name";
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HomeLinks from '../components/HomeLinks.astro'
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{name}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<BaseLayout>
+  <HomeLinks />
+  <a class="music-note" href="https://www.last.fm/user/DrunkButSober" data-music-note>
+    <svg class="disc" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11.5" fill="#292322" />
+      <circle cx="12" cy="12" r="9.4" fill="none" stroke="#504440" />
+      <circle cx="12" cy="12" r="7.6" fill="none" stroke="#504440" />
+      <path d="M3.3 13a8.8 8.8 0 0 1 5.5-9M20.7 11a8.8 8.8 0 0 1-5.5 9" fill="none" stroke="#a89179" stroke-linecap="round" />
+      <circle cx="12" cy="12" r="4.6" fill="#a6533e" />
+      <path d="M12 7.4a4.6 4.6 0 0 1 4.6 4.6H12z" fill="#d58d67" />
+      <circle cx="12" cy="12" r="1" fill="#f0ddba" />
+    </svg>
+    <span class="track">See recent tracks on Last.fm</span>
+  </a>
+</BaseLayout>
 
-      :root {
-        --bg: #0a0a0a;
-        --surface: #111111;
-        --border: #1e1e1e;
-        --muted: #3a3a3a;
-        --subtle: #666666;
-        --body: #a8a8a8;
-        --heading: #f0ede8;
-        --accent: #e8e0d0;
-        --highlight: #c9b99a;
-        --red: #e85d5d;
+<script>
+  const note = document.querySelector<HTMLAnchorElement>('[data-music-note]')
+  const label = note?.querySelector('.track')
+  const feed = 'https://lastfm-last-played.biancarosa.com.br/DrunkButSober/latest-song'
 
-        --font-serif: 'Instrument Serif', Georgia, serif;
-        --font-mono: 'Geist Mono', 'Fira Code', monospace;
+  async function refreshTrack() {
+    if (!note || !label || document.hidden) return
+
+    try {
+      const response = await fetch(feed, { cache: 'no-store', signal: AbortSignal.timeout(8000) })
+      if (!response.ok) throw new Error('Last.fm feed unavailable')
+      const { track } = await response.json()
+      if (typeof track?.name !== 'string' || typeof track.artist?.['#text'] !== 'string') {
+        throw new Error('Incomplete track data')
       }
 
-      html { background: var(--bg); color: var(--body); font-family: var(--font-mono); }
+      const playing = track['@attr']?.nowplaying === 'true' || track['@attr']?.nowplaying === true
+      const description = `${playing ? 'Now playing' : 'Last played'} · ${track.name} · ${track.artist['#text']}`
+      label.textContent = description
+      note.title = description
+      note.toggleAttribute('data-playing', playing)
+    } catch {
+      label.textContent = 'See recent tracks on Last.fm'
+      note.removeAttribute('title')
+      note.removeAttribute('data-playing')
+    }
+  }
 
-      body {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-      }
+  refreshTrack()
+  window.setInterval(refreshTrack, 20000)
+  document.addEventListener('visibilitychange', refreshTrack)
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) refreshTrack()
+  })
+</script>
 
-      body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 100;
-        opacity: .025;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        background-size: 200px 200px;
-      }
+<style>
+  @font-face {
+    font-family: Caveat;
+    src: url('/Caveat.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+  }
 
-      .scene {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 1.5rem;
-        max-width: 480px;
-        width: 100%;
-      }
+  .music-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    max-width: 100%;
+    margin: 1.3rem 0 2rem;
+    padding: 0.18rem 0.85rem 0.3rem;
+    background: repeating-linear-gradient(0deg, #a3885c25 0 1px, transparent 1px 21px), #efdfbb;
+    color: #382a24;
+    box-shadow: 2px 3px 0 #090e1166;
+    font: 650 clamp(1.15rem, 4vw, 1.6rem)/1.2 Caveat, cursive;
+    text-decoration: none;
+    white-space: nowrap;
+  }
 
-      .scene.active { display: flex; }
+  .music-note:hover {
+    color: #382a24;
+    text-decoration: underline;
+  }
 
-      @keyframes fade-in {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
+  .disc {
+    flex: 0 0 1.05em;
+    width: 1.05em;
+    height: 1.05em;
+  }
 
-      .scene.active > * {
-        animation: fade-in 0.5s ease both;
-      }
+  @media (prefers-reduced-motion: no-preference) {
+    .music-note[data-playing] .disc {
+      animation: spin-disc 5s linear infinite;
+    }
+  }
 
-      .scene.active > *:nth-child(2) { animation-delay: 0.1s; }
-      .scene.active > *:nth-child(3) { animation-delay: 0.2s; }
-      .scene.active > *:nth-child(4) { animation-delay: 0.3s; }
+  @keyframes spin-disc {
+    to { transform: rotate(1turn); }
+  }
 
-      .countdown-number {
-        font-family: var(--font-serif);
-        font-size: clamp(6rem, 18vw, 10rem);
-        color: var(--heading);
-        line-height: 1;
-        font-weight: 400;
-      }
-
-      .countdown-label {
-        font-size: 1rem;
-        letter-spacing: .18em;
-        text-transform: uppercase;
-        color: var(--subtle);
-      }
-
-      .boo-gif {
-        width: 380px;
-        max-width: 90vw;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-      }
-
-      .message {
-        font-family: var(--font-serif);
-        font-size: clamp(2.2rem, 6vw, 3.2rem);
-        color: var(--accent);
-        line-height: 1.3;
-      }
-
-      .sub-message {
-        font-size: 1.15rem;
-        color: var(--subtle);
-        letter-spacing: .06em;
-      }
-
-      .job-image {
-        width: 420px;
-        max-width: 90vw;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        opacity: 0.85;
-        transition: opacity 0.3s;
-      }
-
-      .gotcha {
-        font-family: var(--font-serif);
-        font-size: clamp(2.2rem, 6vw, 3.4rem);
-        color: var(--red);
-        font-style: italic;
-      }
-
-      .final-text {
-        font-size: 1.1rem;
-        letter-spacing: .14em;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin-top: 1rem;
-      }
-
-      .final-text span {
-        display: block;
-        margin-top: .5rem;
-        color: var(--subtle);
-        letter-spacing: .06em;
-        text-transform: none;
-        font-size: 1.2rem;
-      }
-
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
-      }
-
-      .countdown-number {
-        animation: pulse 1s ease-in-out infinite;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="scene-countdown" class="scene active">
-      <div class="countdown-number" id="countdown">5</div>
-      <div class="countdown-label">loading something...</div>
-    </div>
-
-    <div id="scene-boo" class="scene">
-      <img class="boo-gif" src="https://media.tenor.com/YsG4HXC-G_IAAAAd/reze-csm-reze.gif" alt="Reze boo" />
-      <div class="message">boo</div>
-      <div class="sub-message">gotcha</div>
-    </div>
-
-    <div id="scene-onemore" class="scene">
-      <div class="message">okay one more thing</div>
-    </div>
-
-    <div id="scene-job" class="scene">
-      <img class="job-image" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjd5NnpsejdjNmx2aG1yd2V6dnhiY2VtMHN6YXg5anplMjVqcXd5OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/T39By0uZSaAjSYaF9B/giphy.gif" alt="job application" />
-    </div>
-
-    <div id="scene-gotcha" class="scene">
-      <div class="gotcha">you just got jumpscared</div>
-      <div class="sub-message">there is never a job</div>
-    </div>
-
-    <div id="scene-final" class="scene">
-      <div class="final-text">
-        come back later
-        <span>maybe there'll be something real here</span>
-      </div>
-    </div>
-
-    <script>
-      const scenes = [
-        'scene-countdown',
-        'scene-boo',
-        'scene-onemore',
-        'scene-job',
-        'scene-gotcha',
-        'scene-final'
-      ];
-
-      let currentScene = 0;
-      let countdownValue = 5;
-
-      function showScene(index) {
-        scenes.forEach(id => document.getElementById(id).classList.remove('active'));
-        document.getElementById(scenes[index]).classList.add('active');
-      }
-
-      function startCountdown() {
-        const countdownEl = document.getElementById('countdown');
-        const interval = setInterval(() => {
-          countdownValue--;
-          countdownEl.textContent = countdownValue;
-          if (countdownValue <= 0) {
-            clearInterval(interval);
-            nextScene();
-          }
-        }, 1000);
-      }
-
-      function nextScene() {
-        currentScene++;
-        if (currentScene < scenes.length) {
-          showScene(currentScene);
-          if (currentScene === 1) {
-            setTimeout(nextScene, 2500);
-          } else if (currentScene === 2) {
-            setTimeout(nextScene, 1800);
-          } else if (currentScene === 3) {
-            setTimeout(nextScene, 3000);
-          } else if (currentScene === 4) {
-            setTimeout(nextScene, 2500);
-          }
-        }
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(startCountdown, 500);
-      });
-    </script>
-  </body>
-</html>
+  .track {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

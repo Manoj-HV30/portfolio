@@ -1,0 +1,20 @@
+---
+import { profile } from '../data/profile'
+---
+
+<footer class="reading-column">
+  <a href="#top">Back to top</a>
+  {profile.links.map(({ label, href }) => <a href={href}>{label}</a>)}
+</footer>
+
+<style>
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: 2.35rem;
+    padding-block: 0.9rem 2rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.875rem;
+  }
+</style>

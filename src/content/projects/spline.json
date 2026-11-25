@@ -1,0 +1,8 @@
+{
+  "title": "spline",
+  "description": "A vector graphics playground and animation system with a custom curve editor. Supports SVG export, keyframe interpolation, and a plugin API for custom easing functions. Used internally for prototyping UI animations.",
+  "url": "https://spline.example.com",
+  "tags": ["typescript", "canvas", "svg", "animation"],
+  "featured": false,
+  "year": 2024
+}

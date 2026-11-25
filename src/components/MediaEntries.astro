@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+type Media = CollectionEntry<'media'>['data']
+
+interface Props {
+  entries: Media[]
+  preview?: boolean
+}
+
+const { entries, preview = false } = Astro.props
+---
+
+<ul class="entry-list" role="list">
+  {entries.map(({ title, type, note, creator }) => (
+    <li>
+      <div class="entry-heading">
+        <h3>{title}</h3>
+        {preview
+          ? <span class="kind">{type === 'movie' ? 'film' : type}</span>
+          : creator && <span>{creator}</span>}
+      </div>
+      <p>{preview ? note.split(/(?<=[.!?])\s/)[0] : note}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .entry-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.2rem 1rem;
+  }
+
+  .entry-heading span {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .kind {
+    text-transform: capitalize;
+  }
+</style>

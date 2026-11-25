@@ -1,0 +1,47 @@
+{
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "B.S.",
+      "field": "Computer Science & Mathematics",
+      "year": "2018–2022"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Stripe",
+      "role": "Software Engineer",
+      "period": "2024–Present",
+      "description": "Building payment infrastructure APIs. Design and implement idempotency key middleware, lead migration of legacy billing endpoints to v3 API, and maintain critical-path services handling $2B+ monthly volume."
+    },
+    {
+      "company": "Vercel",
+      "role": "Frontend Platform Engineer",
+      "period": "2022–2024",
+      "description": "Core contributor to the Next.js runtime and Edge Functions platform. Shipped incremental static regeneration improvements, built the middleware API, and led developer experience initiatives that reduced cold-start latency by 40%."
+    },
+    {
+      "company": "Recurse Center",
+      "role": "Batch Participant (S2'21)",
+      "period": "2021",
+      "description": "Self-directed retreat exploring compilers, graphics programming, and distributed systems. Built a tiny Lisp interpreter in Rust, a raytracer in Go, and contributed patches to the Zig compiler."
+    }
+  ],
+  "skills": [
+    "TypeScript",
+    "Rust",
+    "Go",
+    "Python",
+    "React",
+    "Node.js",
+    "PostgreSQL",
+    "SQLite",
+    "Kubernetes",
+    "Terraform",
+    "gRPC",
+    "WebAssembly",
+    "System Design",
+    "Distributed Systems",
+    "Compiler Design"
+  ]
+}

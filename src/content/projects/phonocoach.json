@@ -1,0 +1,15 @@
+{
+  "title": "PhonoCoach",
+  "description": "Built a Chrome extension for pronunciation feedback on selected webpage text, with phoneme-level analysis and a similarity score.",
+  "github": "https://github.com/Manoj-HV30/PhonoCoach",
+  "domain": "Speech technology",
+  "tags": [
+    "JavaScript",
+    "Python",
+    "FastAPI",
+    "Whisper"
+  ],
+  "confirmed": true,
+  "order": 3,
+  "year": 2025
+}

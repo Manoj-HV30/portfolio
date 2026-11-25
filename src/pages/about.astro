@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout page="about" title="About" intro="A little about me.">
+  <div class="prose bio">
+    <p>
+      Heya, I’m Manoj, currently a 3rd-year computer science undergraduate in Bengaluru, India. My interests revolve around applied AI, systems programming, cloud, and AI inference. I love to try and tinker around bleeding-edge and hobbyist software. Currently rocking Arch Linux <span class="distro arch" aria-hidden="true"></span> and Gentoo <span class="distro gentoo" aria-hidden="true"></span>.
+    </p>
+    <p>
+      I write about any interesting stuff I’m fiddling with or stumble upon on the internet. I plan to create a sort of <a href="/vault/">vault</a> on this site consisting of AI developments, breakthroughs, and conspiracy theories to document this unprecedented technological shift and AI revolution.
+    </p>
+    <p>
+      I adore old internet and open-source software. I like to self-host things, play indie games, and watch <a href="https://anilist.co/user/papyyrus/">anime</a> in my free time, and I’m quite ambitious to become an <a href="https://paulgraham.com/earn.html">entrepreneur</a>, LOL.
+    </p>
+  </div>
+
+</BaseLayout>
+
+<style>
+  @media (hover: hover) and (pointer: fine) {
+    :global(body[data-page="about"]),
+    :global(body[data-page="about"] main),
+    :global(body[data-page="about"] main a),
+    :global(body[data-page="about"] header),
+    :global(body[data-page="about"] header a) {
+      cursor: url('/icons/golden-flower-cursor.svg') 15 12, auto;
+    }
+  }
+
+  .bio p + p {
+    margin-top: 1rem;
+  }
+  .distro {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.1em;
+    background: currentColor;
+    mask: var(--logo) center / contain no-repeat;
+  }
+
+  .arch { --logo: url('/icons/archlinux.svg'); color: #67c6f5; }
+  .gentoo { --logo: url('/icons/gentoo.svg'); color: #b6a2e0; }
+</style>

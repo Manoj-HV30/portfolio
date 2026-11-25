@@ -1,0 +1,328 @@
+---
+import { navigation, type Section } from '../data/profile'
+
+interface Props {
+  title: string
+  intro: string
+  page: Section
+  article: boolean
+}
+
+const { title, intro, page, article } = Astro.props
+const scenes = {
+  home: { src: '/ruins.webp', width: 1536, height: 512 },
+  projects: { src: '/core-machinery.webp', width: 1536, height: 512 },
+  blog: { src: '/waterfall-violet.webp', width: 1536, height: 512 },
+  vault: { src: '/vault-archive.webp', width: 1600, height: 533 },
+  about: { src: '/night-horizon.webp', width: 1536, height: 512 },
+}
+const artwork = scenes[page]
+const sceneMarks: Partial<Record<Section, string>> = {
+  home: 'dog',
+  projects: 'star',
+  blog: 'echo',
+  vault: 'key',
+  about: 'star',
+}
+const sceneMark = sceneMarks[page]
+---
+
+<header class:list={['masthead', page]} id="top" tabindex="-1">
+  <picture class="masthead-art" aria-hidden="true">
+    <img src={artwork.src} width={artwork.width} height={artwork.height} alt="" fetchpriority="high" />
+  </picture>
+
+  <div class="masthead-copy">
+    <nav aria-label="Main navigation">
+      {navigation.map(({ page: section, label, href }) => (
+        <a href={href} aria-current={section === page ? (article ? 'location' : 'page') : undefined}>{label}</a>
+      ))}
+    </nav>
+    <h1 class:list={{ 'home-title': page === 'home' }}>
+      {page === 'home' && <img src="/papyrus-alternate.webp" alt="" width="100" height="100" />}
+      {title}
+    </h1>
+    {intro && <p>{intro}</p>}
+  </div>
+  {sceneMark && <span class:list={["scene-mark", sceneMark]} aria-hidden="true"></span>}
+  {page !== 'about' && sceneMark && (
+    <button class:list={['scene-mark', sceneMark]} type="button" aria-label={page === 'home' ? 'Find the dog' : page === 'projects' ? 'Touch the determination star' : page === 'blog' ? 'Reveal the artifact' : 'Open the dimensional box'} data-easter-egg={page}>
+      {page === 'home' ? '🐕' : page === 'projects' ? '★' : page === 'blog' ? '♫' : '▣'}
+    </button>
+  )}
+  <span class="egg-message" data-egg-message aria-live="polite"></span>
+  <slot />
+</header>
+
+<script>
+  const egg = document.querySelector<HTMLButtonElement>('[data-easter-egg]')
+  const message = document.querySelector<HTMLElement>('[data-egg-message]')
+  const lines: Record<string, string> = {
+    home: 'The dog has left behind a little dog residue.',
+    projects: 'Your determination increased. (The benchmark is unchanged.)',
+    blog: 'A red artifact appears. It seems to be impossible to pick up.',
+    vault: 'The box is full of dog hair. You find some residue instead.',
+  }
+
+  egg?.addEventListener('click', () => {
+    if (!message) return
+    message.textContent = lines[egg.dataset.easterEgg ?? ''] ?? ''
+    egg.classList.add('egg-found')
+  })
+</script>
+
+<style>
+  .scene-mark {
+    position: absolute;
+    right: clamp(1rem, 7vw, 7rem);
+    bottom: 2.05rem;
+    color: #e7c890;
+    opacity: 0.5;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    border: 0;
+    padding: .25rem;
+    background: transparent;
+    text-shadow: 0 1px 5px #000;
+    pointer-events: auto;
+  }
+
+  .scene-mark.dog {
+    width: 2.5rem;
+    height: 0.8rem;
+    background: #eee9dd;
+    clip-path: polygon(5% 28%, 50% 28%, 64% 0, 79% 28%, 100% 28%, 91% 75%, 23% 75%);
+    image-rendering: pixelated;
+  }
+
+  .scene-mark.star {
+    width: 2rem;
+    height: 0.7rem;
+    background: #ffeab5;
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+    animation: star-glimmer 2.4s ease-in-out infinite;
+  }
+
+  .scene-mark.echo {
+    width: 2rem;
+    height: 1.1rem;
+    border: 2px solid #a2d7ec;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px #a2d7ec44, 0 0 0 8px #a2d7ec22;
+  }
+
+  .scene-mark.key {
+    width: 2rem;
+    height: 0.6rem;
+    border: 2px solid #ebc883;
+    border-radius: 50%;
+  }
+
+  .scene-mark:is(button):hover { transform: scale(1.22); }
+  .scene-mark:is(button):focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .scene-mark.key::after {
+    content: '';
+    position: absolute;
+    width: 1rem;
+    height: 2px;
+    top: 0.22rem;
+    left: 0.45rem;
+    background: #ebc883;
+    box-shadow: 0.55rem 3px 0 -0.4px #ebc883;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .masthead.about,
+    .masthead.about a {
+      cursor: url('/icons/golden-flower-cursor.svg') 15 12, pointer;
+    }
+
+    .masthead.about nav a { cursor: pointer; }
+  }
+
+  @keyframes star-glimmer {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.9; }
+  }
+
+  .egg-message {
+    position: absolute;
+    right: clamp(1rem, 7vw, 7rem);
+    bottom: 0.85rem;
+    max-width: min(28rem, 70vw);
+    color: var(--ink);
+    font-size: 0.82rem;
+    text-shadow: 0 1px 5px #000;
+    text-align: right;
+  }
+
+  .egg-found { animation: egg-pop 280ms ease-out; }
+  @keyframes egg-pop { 50% { scale: 1.35; } }
+
+  .masthead {
+    --top-space: 6.5625rem;
+    --title-gap: 3.9375rem;
+    --title-size: clamp(3.28125rem, 8vw, 4.59375rem);
+    --tagline-gap: 1.640625rem;
+    --tagline-size: 1.18125rem;
+    --nav-size: 1.18125rem;
+    --art-focus: 60% 53%;
+    --blend-depth: 7rem;
+    position: relative;
+    isolation: isolate;
+    padding-block: var(--top-space) 5.9rem;
+    background: var(--page);
+    text-align: center;
+  }
+
+  .masthead:not(.home) {
+    padding-bottom: 3.6rem;
+  }
+
+  .masthead.about {
+    padding-bottom: 5.15rem;
+    --art-focus: 57% 55%;
+  }
+
+  .masthead.home {
+    --art-focus: 66% 62%;
+    padding-bottom: 3.125rem;
+  }
+  .projects { --art-focus: 66% 53%; }
+  .blog { --art-focus: 67% 63%; }
+  .vault { --art-focus: 64% 55%; }
+
+  .masthead-art, .masthead::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .masthead-art {
+    z-index: -2;
+    background: #161d29;
+  }
+
+  .masthead-art img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--art-focus);
+  }
+
+  .masthead::after {
+    z-index: -1;
+    content: '';
+    background:
+      linear-gradient(0deg, var(--page), transparent var(--blend-depth)),
+      radial-gradient(ellipse at 50% 47%, #10141c91 0%, #10141c45 39%, transparent 72%),
+      linear-gradient(180deg, #10141ca8, #10141c30 40%, transparent 62%);
+  }
+
+  .masthead-copy {
+    width: min(calc(100% - 1.5rem), 52rem);
+    margin-inline: auto;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem clamp(0.65rem, 3.35vw, 1.95rem);
+    font-size: var(--nav-size);
+    font-weight: 600;
+    line-height: 1.7;
+  }
+
+  nav a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-shadow: 0 1px 8px #10141c;
+  }
+
+  nav a:is([aria-current], :hover, :focus-visible) {
+    color: var(--link);
+    text-decoration-color: currentColor;
+  }
+
+  h1 {
+    margin: var(--title-gap) 0 0;
+    color: var(--ink);
+    font: 400 var(--title-size)/1.1 var(--display);
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+    text-shadow: 0 2px 0 #151923, 0 3px 18px #11151f;
+  }
+
+  p {
+    margin: var(--tagline-gap) auto 0;
+    color: var(--ink);
+    font-size: var(--tagline-size);
+    line-height: 1.7;
+    text-shadow: 0 1px 8px #10141c;
+  }
+
+  .home-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.55rem, 1.5vw, 1rem);
+  }
+
+  .home-title img {
+    width: clamp(4rem, 10vw, 7rem);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    flex: none;
+    border-radius: 0.45rem;
+
+  }
+
+  @media (max-width: 48rem) {
+    .masthead {
+      --top-space: 3.9375rem;
+      --title-gap: 1.96875rem;
+      --tagline-gap: 0.984375rem;
+      --nav-size: 1.115625rem;
+      --blend-depth: 5rem;
+      padding-bottom: 4rem;
+    }
+
+    .masthead:not(.home) { padding-bottom: 2.65rem; }
+    .masthead.about { padding-bottom: 4rem; }
+    .masthead.home {
+      --art-focus: 66% 62%;
+      padding-bottom: 1.55rem;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .masthead {
+      --top-space: 3.1875rem;
+      --title-gap: 1.59375rem;
+      --title-size: clamp(2.65625rem, 8vw, 3.71875rem);
+      --tagline-gap: 0.796875rem;
+      --tagline-size: 0.95625rem;
+      --nav-size: 0.903125rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .masthead-art { animation: settle-art 420ms ease-out; }
+    h1 { animation: settle-title 420ms ease-out; }
+  }
+
+  @keyframes settle-art {
+    from { opacity: 0.86; }
+  }
+
+  @keyframes settle-title {
+    from { opacity: 0.84; translate: 0 5px; }
+  }
+</style>

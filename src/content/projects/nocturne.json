@@ -1,0 +1,8 @@
+{
+  "title": "nocturne",
+  "description": "Ambient terminal color scheme generator. Analyzes a reference image with K-means clustering, extracts a harmonious palette, and outputs configs for Alacritty, Kitty, WezTerm, and VS Code themes.",
+  "github": "https://github.com/user/nocturne",
+  "tags": ["python", "cli", "color-theory", "terminals"],
+  "featured": false,
+  "year": 2024
+}

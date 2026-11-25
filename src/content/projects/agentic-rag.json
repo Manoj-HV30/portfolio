@@ -1,0 +1,13 @@
+{
+  "title": "Agentic RAG",
+  "description": "Built an agentic RAG pipeline from scratch, using retrieval-as-a-tool and autonomous multi-hop planning based on a partially observable Markov decision process. Hybrid dense and BM25 retrieval with a three-tier memory system; evaluated on 100 HotpotQA questions.",
+  "github": "https://github.com/Manoj-HV30/agentic-rag",
+  "domain": "Applied AI / information retrieval",
+  "tags": [
+    "Python",
+    "ChromaDB"
+  ],
+  "confirmed": true,
+  "order": 1,
+  "year": 2026
+}

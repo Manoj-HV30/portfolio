@@ -1,0 +1,8 @@
+{
+  "title": "kestrel",
+  "description": "A lightweight, schema-aware event store built on SQLite. Supports projection rebuilding, point-in-time queries, and subscription-based read models. Designed for small-to-medium services that want event sourcing without Kafka-tier overhead.",
+  "github": "https://github.com/user/kestrel",
+  "tags": ["rust", "sqlite", "event-sourcing", "async"],
+  "featured": true,
+  "year": 2025
+}

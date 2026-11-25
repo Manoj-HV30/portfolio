@@ -1,0 +1,77 @@
+---
+// A minimal SVG glider — the classic Conway's Game of Life pattern
+// rendered as an abstract logo mark
+---
+
+<svg
+  class="glider-logo"
+  viewBox="0 0 40 40"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Glider logo mark"
+>
+  <rect x="4" y="20" width="4" height="4" rx="1" class="cell" />
+  <rect x="8" y="24" width="4" height="4" rx="1" class="cell" />
+  <rect x="12" y="12" width="4" height="4" rx="1" class="cell" />
+  <rect x="12" y="20" width="4" height="4" rx="1" class="cell" />
+  <rect x="12" y="28" width="4" height="4" rx="1" class="cell" />
+  <rect x="16" y="16" width="4" height="4" rx="1" class="cell" />
+  <rect x="16" y="24" width="4" height="4" rx="1" class="cell" />
+  <rect x="20" y="20" width="4" height="4" rx="1" class="cell" />
+  <rect x="24" y="0" width="4" height="4" rx="1" class="cell hidden-xs" />
+  <rect x="28" y="4" width="4" height="4" rx="1" class="cell hidden-xs" />
+  <rect x="32" y="8" width="4" height="4" rx="1" class="cell hidden-xs" />
+  <rect x="0" y="36" width="4" height="4" rx="1" class="cell hidden-xs" />
+</svg>
+
+<style>
+  .glider-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cell {
+    fill: var(--accent);
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .cell:nth-child(1) { animation: cellPulse 4s ease-in-out infinite; }
+  .cell:nth-child(2) { animation: cellPulse 4s ease-in-out 0.3s infinite; }
+  .cell:nth-child(3) { animation: cellPulse 4s ease-in-out 0.6s infinite; }
+  .cell:nth-child(4) { animation: cellPulse 4s ease-in-out 0.9s infinite; }
+  .cell:nth-child(5) { animation: cellPulse 4s ease-in-out 1.2s infinite; }
+  .cell:nth-child(6) { animation: cellPulse 4s ease-in-out 1.5s infinite; }
+  .cell:nth-child(7) { animation: cellPulse 4s ease-in-out 1.8s infinite; }
+  .cell:nth-child(8) { animation: cellPulse 4s ease-in-out 2.1s infinite; }
+  .cell:nth-child(9) { animation: cellPulse 4s ease-in-out 2.4s infinite; }
+  .cell:nth-child(10) { animation: cellPulse 4s ease-in-out 2.7s infinite; }
+  .cell:nth-child(11) { animation: cellPulse 4s ease-in-out 3.0s infinite; }
+  .cell:nth-child(12) { animation: cellPulse 4s ease-in-out 3.3s infinite; }
+
+  @keyframes cellPulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.85; }
+  }
+
+  .hidden-xs {
+    display: none;
+  }
+
+  @media (min-width: 480px) {
+    .glider-logo {
+      width: 40px;
+      height: 40px;
+    }
+    .hidden-xs {
+      display: block;
+    }
+  }
+
+  @media (hover: hover) {
+    .glider-logo:hover .cell {
+      animation-duration: 1.5s;
+    }
+  }
+</style>

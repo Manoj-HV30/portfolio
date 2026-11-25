@@ -1,0 +1,10 @@
+---
+import { buildNotes } from '../data/blog'
+---
+
+<ul class="entry-list" role="list">
+  <li>
+    <h3><a href={buildNotes.href}>{buildNotes.title}</a></h3>
+    <p>{buildNotes.description}</p>
+  </li>
+</ul>
