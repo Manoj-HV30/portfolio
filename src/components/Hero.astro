@@ -44,23 +44,15 @@ const soul = souls[page]
     </h1>
     {intro && <p>{intro}</p>}
   </div>
-  <button class:list={['soul-heart', soul.color]} type="button" aria-label={soul.trait} aria-expanded="false" data-soul>
+  <span class:list={['soul-heart', soul.color]} role="img" aria-label={soul.trait}>
     <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
       <path d="M3 1h3v1h2v2h2V2h2V1h3v1h1v1h1v4h-1v2h-2v2h-2v2h-2v1h-2v-1H6v-2H4v-2H2V9H1V5h1V3h1z" />
     </svg>
-    <span>{soul.trait}</span>
-  </button>
+  </span>
   <slot />
 </header>
 
-<script>
-  document.querySelectorAll<HTMLButtonElement>('[data-soul]').forEach((heart) => {
-    heart.addEventListener('click', () => {
-      const open = heart.getAttribute('aria-expanded') === 'true'
-      heart.setAttribute('aria-expanded', String(!open))
-    })
-  })
-</script>
+
 
 
 
@@ -77,7 +69,6 @@ const soul = souls[page]
     border: 0;
     background: transparent;
     color: var(--soul-color);
-    cursor: pointer;
   }
 
   .soul-heart svg {
@@ -89,28 +80,6 @@ const soul = souls[page]
     filter: drop-shadow(0 2px 3px #080b12aa);
   }
 
-  .soul-heart span {
-    position: absolute;
-    top: calc(100% + 0.2rem);
-    right: 0;
-    padding: 0.2rem 0.45rem;
-    border: 1px solid #ffffff40;
-    background: #111722eF;
-    color: #f4ede0;
-    font: 600 1.1rem/1 Caveat, cursive;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    translate: 0 -0.15rem;
-    transition: opacity 140ms ease, translate 140ms ease;
-  }
-
-  .soul-heart:is(:hover, :focus-visible, [aria-expanded="true"]) span {
-    opacity: 1;
-    translate: 0 0;
-  }
-
-  .soul-heart:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
   .determination { --soul-color: #ff4b54; }
   .bravery { --soul-color: #f29a48; }
   .integrity { --soul-color: #579bf1; }
@@ -126,10 +95,6 @@ const soul = souls[page]
     14% { transform: scale(1.08); }
     28% { transform: scale(0.97); }
     42% { transform: scale(1.04); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .soul-heart span { transition: none; }
   }
 
   @media (max-width: 48rem) {
