@@ -5,7 +5,9 @@
   "domain": "Applied AI / information retrieval",
   "tags": [
     "Python",
-    "ChromaDB"
+    "ChromaDB",
+    "Sentence Transformers",
+    "Hybrid retrieval"
   ],
   "confirmed": true,
   "order": 1,

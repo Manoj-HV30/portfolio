@@ -4,7 +4,9 @@
   "github": "https://github.com/Manoj-HV30/multithreaded-raytracer",
   "domain": "Computer graphics",
   "tags": [
-    "C++"
+    "C++",
+    "ImageMagick",
+    "Multithreading"
   ],
   "confirmed": true,
   "order": 2,

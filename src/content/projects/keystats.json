@@ -1,0 +1,17 @@
+{
+  "title": "KeyStats",
+  "description": "Built a Linux keystroke counter with lifetime per-key statistics stored locally in SQLite and a live terminal keyboard heatmap. A systemd daemon records key counts without storing typed sequences.",
+  "github": "https://github.com/Manoj-HV30/keystats",
+  "domain": "Linux / systems programming",
+  "tags": [
+    "C++",
+    "SQLite",
+    "FTXUI",
+    "CMake",
+    "systemd",
+    "Linux evdev"
+  ],
+  "confirmed": true,
+  "order": 6,
+  "year": 2026
+}

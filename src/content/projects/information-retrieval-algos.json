@@ -1,0 +1,14 @@
+{
+  "title": "Information Retrieval Algorithms",
+  "description": "Implemented core search and retrieval algorithms from scratch in Python, including BM25, TF-IDF, inverted indexes, and reciprocal rank fusion. Includes vector search techniques and ranking evaluation metrics.",
+  "github": "https://github.com/Manoj-HV30/information-retrieval-algos",
+  "domain": "Information retrieval",
+  "tags": [
+    "Python",
+    "Python standard library",
+    "Search and ranking"
+  ],
+  "confirmed": true,
+  "order": 3,
+  "year": 2026
+}

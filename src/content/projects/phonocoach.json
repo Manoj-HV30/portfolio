@@ -7,9 +7,11 @@
     "JavaScript",
     "Python",
     "FastAPI",
-    "Whisper"
+    "Whisper",
+    "FFmpeg",
+    "Chrome Extensions"
   ],
   "confirmed": true,
-  "order": 3,
+  "order": 4,
   "year": 2025
 }

@@ -4,9 +4,11 @@
   "github": "https://github.com/Manoj-HV30/Mini-command-line-interface",
   "domain": "Terminal tooling",
   "tags": [
-    "Python"
+    "Python",
+    "POSIX terminals",
+    "ANSI escape sequences"
   ],
   "confirmed": true,
-  "order": 4,
+  "order": 5,
   "year": 2026
 }
