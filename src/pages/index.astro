@@ -24,11 +24,15 @@ import HomeLinks from '../components/HomeLinks.astro'
   const label = note?.querySelector('.track')
   const feed = 'https://lastfm-last-played.biancarosa.com.br/DrunkButSober/latest-song'
 
+  let refreshing = false
+  let hasTrack = false
+
   async function refreshTrack() {
-    if (!note || !label || document.hidden) return
+    if (!note || !label || document.hidden || refreshing) return
+    refreshing = true
 
     try {
-      const response = await fetch(feed, { cache: 'no-store', signal: AbortSignal.timeout(8000) })
+      const response = await fetch(feed, { cache: 'no-store', signal: AbortSignal.timeout(25000) })
       if (!response.ok) throw new Error('Last.fm feed unavailable')
       const { track } = await response.json()
       if (typeof track?.name !== 'string' || typeof track.artist?.['#text'] !== 'string') {
@@ -38,12 +42,17 @@ import HomeLinks from '../components/HomeLinks.astro'
       const playing = track['@attr']?.nowplaying === 'true' || track['@attr']?.nowplaying === true
       const description = `${playing ? 'Now playing' : 'Last played'} · ${track.name} · ${track.artist['#text']}`
       label.textContent = description
+      hasTrack = true
       note.title = description
       note.toggleAttribute('data-playing', playing)
     } catch {
-      label.textContent = 'See recent tracks on Last.fm'
-      note.removeAttribute('title')
+      if (!hasTrack) {
+        label.textContent = 'See recent tracks on Last.fm'
+        note.removeAttribute('title')
+      }
       note.removeAttribute('data-playing')
+    } finally {
+      refreshing = false
     }
   }
 
